@@ -165,7 +165,7 @@ response:
         .ascii  "    </style>\n"
         .ascii  "  </head>\n"
         .ascii  "  <body>\n"
-        .ascii  "    <h1>Hello from the other side</h1>\n"
+        .ascii  "    <h1>Hello from Arm64 Assemly Server</h1>\n"
         .ascii  "  </body>\n"
         .ascii  "</html>\n"
 
