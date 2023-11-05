@@ -1,7 +1,8 @@
-## Web Server
+## Web Server - TCP server in arm64 asm
  * written in arm64 assembly
  * tested on apple silicon
  * uses unix libc functions
+ * enforces stack integrity
 
 ### instructions
 

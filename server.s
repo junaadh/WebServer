@@ -11,7 +11,7 @@
 
         .equ    PF_INET,     2
         .equ    SOCK_STREAM, 1 
-        /* port number 6969 in lil endian */
+        ; /* port number 6969 in lil endian */
         .equ    PORT,        14619
         .equ    INADDR_ANY,  0
         .equ    BACKLOG,     5
@@ -117,8 +117,28 @@ next_req:
         bl     _close
         ldr    w0,  [sp, #12]
         bl     _close
-        
-        exit  0
+
+stack_integ_prot:
+        str    wzr, [sp, #20]
+        ldr    w8,  [sp, #20]
+        str    w8,  [sp,  #4]
+        ldur   x9,  [x29, #-8]
+        adrp   x8,  ___stack_chk_guard@gotpage
+        ldr    x8,  [x8,  ___stack_chk_guard@gotpageoff]
+        ldr    x8,  [x8]
+        subs   x8,  x8,  x9
+        cset   w8,  eq
+        tbnz   w8,  #0,  chk_pass
+        b      chk_fail
+
+chk_fail:
+        bl     ___stack_chk_fail
+
+chk_pass:
+        ldr    w0,  [sp,  #4]
+        ldp    x29, x30, [sp,  #64]
+        add    sp,  sp,  #80
+        ret
 
 error_any:
         write  STDERR, error_msg, error_msg_len
@@ -165,7 +185,7 @@ response:
         .ascii  "    </style>\n"
         .ascii  "  </head>\n"
         .ascii  "  <body>\n"
-        .ascii  "    <h1>Hello from Arm64 Assemly Server</h1>\n"
+        .ascii  "    <h1>Hello from Arm64 Assembly Server</h1>\n"
         .ascii  "  </body>\n"
         .ascii  "</html>\n"
 
